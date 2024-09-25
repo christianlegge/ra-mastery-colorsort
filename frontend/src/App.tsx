@@ -55,11 +55,13 @@ function App() {
       .then((data) => {
         console.log(data);
         const masteries = data["VisibleUserAwards"].filter(
-          (badge) =>
+          (badge: Record<string, unknown>) =>
             badge["AwardType"] === "Mastery/Completion" &&
             badge["ConsoleName"] !== "Events",
         );
-        const badges = masteries.map((badge) => badge["ImageIcon"]);
+        const badges = masteries.map(
+          (badge: Record<string, unknown>) => badge["ImageIcon"],
+        );
         setBadgeUrls(badges);
         localStorage.setItem("badgeUrls", JSON.stringify(badges));
       })
