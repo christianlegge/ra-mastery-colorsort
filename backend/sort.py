@@ -28,7 +28,7 @@ def sort_images(urls):
         if dominant_hls[1] < 0.02 or dominant_hls[2] < 0.02 or dominant_hls[1] > 0.98:
             dominant_hls = (1, 0, 0)
         url_with_dominant_hue.append((image[0], dominant_hls))
-    print(url_with_dominant_hue)
+    # print(url_with_dominant_hue)
     # url_with_dominant_hue.sort(key=lambda x: x[1][2])
     # url_with_dominant_hue.sort(key=lambda x: x[1][1])
     url_with_dominant_hue.sort(key=lambda x: x[1][0])
@@ -36,7 +36,7 @@ def sort_images(urls):
     return new_urls
 
 def url_to_image(filename):
-    print("Downloading", filename)
+    # print("Downloading", filename)
     url = f"https://media.retroachievements.org{filename}"
     img_data = requests.get(url)
     pil_image = Image.open(BytesIO(img_data.content)).convert("RGB")
