@@ -82,126 +82,141 @@ function App() {
 
   return (
     <>
-      {badgeUrls.length > 0 ? (
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <button
-            className="clear"
-            onClick={() => {
-              setBadgeUrls([]);
-              setSortedBadgeUrls([]);
-              setUsername("");
-              setApiKey("");
-              localStorage.removeItem("badgeUrls");
+      <header>
+        <h1>ra-mastery-colorsort</h1>
+        <a href="https://github.com/christianlegge/ra-mastery-colorsort">
+          GitHub
+        </a>
+      </header>
+      <main>
+        {badgeUrls.length > 0 ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "1rem",
             }}
           >
-            Clear Cached Badges
-          </button>
-          {sortLoading ? (
+            <button
+              className="clear"
+              onClick={() => {
+                setBadgeUrls([]);
+                setSortedBadgeUrls([]);
+                setUsername("");
+                setApiKey("");
+                localStorage.removeItem("badgeUrls");
+              }}
+            >
+              Clear Cached Badges
+            </button>
+            {sortLoading ? (
+              <p>
+                Loading... this may take a while if you're a very impressive
+                player!
+              </p>
+            ) : (
+              <button onClick={sort_badges}>Sort -&gt;</button>
+            )}
+          </div>
+        ) : (
+          <form
+            className="form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              get_badges();
+              return false;
+            }}
+          >
+            <label htmlFor="username">Username</label>
+            <input
+              className="text-input"
+              ref={userRef}
+              type="text"
+              id="username"
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <label htmlFor="apiKey" style={{ marginTop: "1rem" }}>
+              API Key
+            </label>
+            <input
+              className="text-input"
+              ref={apiKeyRef}
+              type="password"
+              id="apiKey"
+              placeholder="API Key"
+              onChange={(e) => setApiKey(e.target.value)}
+            />
             <p>
-              Loading... this may take a while if you're a very impressive
-              player!
+              You can find this on your{" "}
+              <a href="https://retroachievements.org/settings">
+                RetroAchievements settings page
+              </a>
+              . It is never sent to the server and never stored, it is only used
+              to fetch your badges from RetroAchievements.org.
             </p>
-          ) : (
-            <button onClick={sort_badges}>Sort -&gt;</button>
-          )}
-        </div>
-      ) : (
-        <form
-          className="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            get_badges();
-            return false;
-          }}
-        >
-          <label htmlFor="username">Username</label>
-          <input
-            className="text-input"
-            ref={userRef}
-            type="text"
-            id="username"
-            placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <label htmlFor="apiKey" style={{ marginTop: "1rem" }}>
-            API Key
-          </label>
-          <input
-            className="text-input"
-            ref={apiKeyRef}
-            type="password"
-            id="apiKey"
-            placeholder="API Key"
-            onChange={(e) => setApiKey(e.target.value)}
-          />
-          <p>
-            You can find this on your{" "}
-            <a href="https://retroachievements.org/settings">
-              RetroAchievements settings page
-            </a>
-            . It is never sent to the server and never stored, it is only used
-            to fetch your badges from RetroAchievements.org.
-          </p>
-          {fetchLoading ? <p>Loading...</p> : <button>Submit</button>}
-        </form>
-      )}
-      {errorMessage && <div className="error">{errorMessage}</div>}
-      {badgeUrls.length > 0 && (
-        <div className="grids">
-          <div>
-            <h2>Before</h2>
-            <div
-              className="badge-grid"
-              style={{
-                display: "grid",
-                placeContent: "center",
-                gridTemplateColumns: "repeat(5, minmax(52px, 1fr))",
-                gap: "0.5rem",
-              }}
-            >
-              {badgeUrls.map((badgeUrl) => (
-                <img
-                  src={`https://retroachievements.org${badgeUrl}`}
-                  alt="badge"
-                  key={badgeUrl}
-                  style={{
-                    width: 52,
-                    height: 52,
-                    border: "2px solid gold",
-                    boxSizing: "content-box",
-                  }}
-                />
-              ))}
+            {fetchLoading ? <p>Loading...</p> : <button>Submit</button>}
+          </form>
+        )}
+        {errorMessage && <div className="error">{errorMessage}</div>}
+        {badgeUrls.length > 0 && (
+          <div className="grids">
+            <div>
+              <h2>Before</h2>
+              <div
+                className="badge-grid"
+                style={{
+                  display: "grid",
+                  placeContent: "center",
+                  gridTemplateColumns: "repeat(5, minmax(52px, 1fr))",
+                  gap: "0.5rem",
+                }}
+              >
+                {badgeUrls.map((badgeUrl) => (
+                  <img
+                    src={`https://retroachievements.org${badgeUrl}`}
+                    alt="badge"
+                    key={badgeUrl}
+                    style={{
+                      width: 52,
+                      height: 52,
+                      border: "2px solid gold",
+                      boxSizing: "content-box",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+            <div>
+              <h2>After</h2>
+              <div
+                className="badge-grid"
+                style={{
+                  display: "grid",
+                  placeContent: "center",
+                  gridTemplateColumns: "repeat(5, minmax(52px, 1fr))",
+                  gap: "0.5rem",
+                }}
+              >
+                {sortedBadgeUrls.map((badgeUrl) => (
+                  <img
+                    src={`https://retroachievements.org${badgeUrl}`}
+                    alt="badge"
+                    key={badgeUrl}
+                    style={{
+                      width: 52,
+                      height: 52,
+                      border: "2px solid gold",
+                      boxSizing: "content-box",
+                    }}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-          <div>
-            <h2>After</h2>
-            <div
-              className="badge-grid"
-              style={{
-                display: "grid",
-                placeContent: "center",
-                gridTemplateColumns: "repeat(5, minmax(52px, 1fr))",
-                gap: "0.5rem",
-              }}
-            >
-              {sortedBadgeUrls.map((badgeUrl) => (
-                <img
-                  src={`https://retroachievements.org${badgeUrl}`}
-                  alt="badge"
-                  key={badgeUrl}
-                  style={{
-                    width: 52,
-                    height: 52,
-                    border: "2px solid gold",
-                    boxSizing: "content-box",
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </main>
     </>
   );
 }
