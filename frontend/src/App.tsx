@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import "./App.css";
 
 function App() {
+  const [errorMessage, setErrorMessage] = useState("");
   const [badgeUrls, setBadgeUrls] = useState([]);
   const [sortedBadgeUrls, setSortedBadgeUrls] = useState([]);
   const [username, setUsername] = useState("");
@@ -21,6 +22,7 @@ function App() {
 
   const sort_badges = useCallback(() => {
     setSortLoading(true);
+    setErrorMessage("");
     fetch(import.meta.env.VITE_SORT_API_URL!, {
       method: "POST",
       body: JSON.stringify({ badge_urls: badgeUrls }),
@@ -35,6 +37,7 @@ function App() {
         setSortedBadgeUrls(data.urls);
       })
       .catch((err) => {
+        setErrorMessage("Error sorting badges. See console for details.");
         console.error(err);
       })
       .finally(() => {
@@ -48,6 +51,7 @@ function App() {
 
   function get_badges() {
     setFetchLoading(true);
+    setErrorMessage("");
     fetch(
       `https://retroachievements.org/API/API_GetUserAwards.php?y=${apiKey}&u=${username}`,
     )
@@ -66,6 +70,9 @@ function App() {
         localStorage.setItem("badgeUrls", JSON.stringify(badges));
       })
       .catch((err) => {
+        setErrorMessage(
+          "Error fetching badges from RetroAchievements.org. See console for details.",
+        );
         console.error(err);
       })
       .finally(() => {
@@ -138,6 +145,7 @@ function App() {
           {fetchLoading ? <p>Loading...</p> : <button>Submit</button>}
         </form>
       )}
+      {errorMessage && <div className="error">{errorMessage}</div>}
       {badgeUrls.length > 0 && (
         <div className="grids">
           <div>
