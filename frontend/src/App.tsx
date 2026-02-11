@@ -30,6 +30,7 @@ function App() {
         "Content-Type": "application/json",
         Origin: "https://christianlegge.dev",
         "Access-Control-Request-Method": "POST",
+        "Access-Control-Allow-Origin": "*",
       },
     })
       .then((result) => result.json())
